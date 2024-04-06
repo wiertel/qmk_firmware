@@ -28,25 +28,30 @@ enum {
     _NUMBERS  // numbers/function/motion
 };
 
-#define KC_CTL_A  MT(MOD_LCTL, KC_A)     // Tap for A, hold for Control
-#define KC_CTL_CL MT(MOD_LCTL, KC_SCLN)  // Tap for colon, hold for Control
-#define KC_SFT_Z  MT(MOD_RSFT, KC_Z)     // Tap for Z, hold for Shift
-#define KC_SFT_SL MT(MOD_RSFT, KC_SLSH)  // Tap for slash, hold for Shift
+// Left-hand home row mods
+#define HOME_A LGUI_T(KC_A)
+#define HOME_S LALT_T(KC_S)
+#define HOME_D LSFT_T(KC_D)
+#define HOME_F LCTL_T(KC_F)
 
-#define KC_GUI_ESC MT(MOD_LGUI, KC_ESC)  // Tap for Esc, hold for GUI (Meta, Command, Win)
-#define KC_ALT_ENT MT(MOD_LALT, KC_ENT)  // Tap for Enter, hold for Alt (Option)
-#define KC_SPE_SPC LT(_SPECIAL, KC_SPC)  // Tap for Space, hold for Special layer
-#define KC_NUM_SPC LT(_NUMBERS, KC_SPC)  // Tap for Space, hold for Numbers layer
-#define KC_SFT_TAB MT(MOD_RSFT, KC_TAB)  // Tap for Tab, hold for Right Shift
+// Right-hand home row mods
+#define HOME_J RCTL_T(KC_J)
+#define HOME_K RSFT_T(KC_K)
+#define HOME_L LALT_T(KC_L)
+#define HOME_SCLN RGUI_T(KC_SCLN)
+
+#define KC_CTRL_ESC MT(MOD_RCTL, KC_ESC)  // Tap for Esc, hold for GUI (Meta, Command, Win)
+#define KC_SPE_PRN LT(_SPECIAL, KC_LEFT_PAREN)   // Tap for Space, hold for Special layer
+#define KC_NUM_PRN LT(_NUMBERS, KC_RIGHT_PAREN)  // Tap for Space, hold for Numbers layer
 
     /* Combomap
      *
      * ,-------------------------------.      ,-------------------------------.
-     * |       |    ESC    |     |     |      |     |    ESC    |     \       |
+     * |       |    ESC    |     |     |      |     |     |     |     |       |
      * |-------+-----+-----+-----+-----|      |-----+-----+-----+-----+-------|
-     * |       |   BSPC   TAB    |     |      |     <     :     >     |       |
-     * |-------+-----+-----+-RMB-+-LMB-|      |ENTER+-----+-----+-----+-------|
-     * |       |     -   ENTER   |     |      |     '     _     |     |       |
+     * |       |     |     |     |     |      |     |     |     |     |       |
+     * |-------+-----+-----+-----+-----|      |-----+-----+-----+-----+-------|
+     * |       |     |     |     |     |      |     |     |     |     |       |
      * `-------------------------------'      `-------------------------------'
      *            .-----------------.            .-----------------.
      *            |     |     |     |            |     |     |     |
@@ -56,22 +61,22 @@ enum {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 0: Alpha layer
      *
-     * ,-------------------------------.      ,-------------------------------.
-     * |     Q |  W  |  E  |  R  |  T  |      |  Y  |  U  |  I  |  O  |   P   |
-     * |-------+-----+-----+-----+-----|      |-----+-----+-----+-----+-------|
-     * | CTRL A|  S  |  D  |  F  |  G  |      |  H  |  J  |  K  |  L  |CTRL ; |
-     * |-------+-----+-----+-----+-----|      |-----+-----+-----+-----+-------|
-     * | SHFT Z|  X  |  C  |  V  |  B  |      |  N  |  M  |  <  |  >  |SHFT / |
-     * `-------------------------------'      `-------------------------------'
-     *   .------------------------------.    .----------------------.
-     *   | ESC META | ENT ALT | SPC SPE |    | SPC NUM | SHFT | TAB |
-     *   '------------------------------'    '----------------------'
+     * ,-------------------------------------.      ,-----------------------------------.
+     * |   Q   |   W   |   E   |   R   |  T  |      |   Y   |   U   |   I   |   O   | P |
+     * |-------+-------+-------+-------+-----|      |-------+-------+-------+-------+---|
+     * | WIN  A| ALT S | SHI D | CTR F |  G  |      | CTR H | SHI J | ALT K | WIN L | ; |
+     * |-------+-------+-------+-------+-----|      |-------+-------+-------+-------+---|
+     * |   Z   |   X   |   C   |   V   |  B  |      |   N   |   M   |   ,   |   .   | / |
+     * `-------------------------------------'      `-----------------------------------'
+     *              .-------------------------.    .---------------------.
+     *              | ESC CTR | ( NUM | ) SPE |    | ENT   | SPC   | ALT |
+     *              '-------------------------'    '---------------------'
      */
     [_ALPHA] = LAYOUT_split_3x5_3(
          KC_Q,     KC_W,   KC_E,   KC_R,   KC_T,          KC_Y,   KC_U,   KC_I,     KC_O,   KC_P,
-         KC_CTL_A, KC_S,   KC_D,   KC_F,   KC_G,          KC_H,   KC_J,   KC_K,     KC_L,   KC_CTL_CL,
-         KC_SFT_Z, KC_X,   KC_C,   KC_V,   KC_B,          KC_N,   KC_M,   KC_COMMA, KC_DOT, KC_SFT_SL,
-             KC_GUI_ESC, KC_ALT_ENT, KC_SPE_SPC,          KC_NUM_SPC, KC_LSFT, KC_SFT_TAB),
+         HOME_A,   HOME_S, HOME_D, HOME_F, KC_G,          KC_H,   HOME_J, HOME_K,   HOME_L, HOME_SCLN,
+         KC_Z,     KC_X,   KC_C,   KC_V,   KC_B,          KC_N,   KC_M,   KC_COMMA, KC_DOT, KC_SLASH,
+            KC_CTRL_ESC, KC_NUM_PRN, KC_SPE_PRN,          KC_ENTER, KC_SPACE, KC_RALT),
 
     /* Keymap 1: Special characters layer
      *

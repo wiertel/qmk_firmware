@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# make gboards/gergoplex:default:flash
+# make gboards/gergoplex:wiertel:flash
 # Make sure you have dfu-programmer installed!
 #----------------------------------------------------------------------------
 
