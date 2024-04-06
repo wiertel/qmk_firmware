@@ -5,6 +5,8 @@
 // #include "combos/germ-mouse-keys.def"
 
 COMB(weEsc,      KC_ESC,          KC_W, KC_E)
+COMB(ioTab,      KC_TAB,          KC_I, KC_O)
+COMB(dtcmQuot,   KC_DOUBLE_QUOTE, KC_COMMA, KC_DOT)
 
 // Word completion
 // #include "combos/eng-combos.def"
