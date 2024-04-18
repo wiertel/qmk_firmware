@@ -9,8 +9,9 @@ DEBUG_MATRIX_SCAN_RATE = no
 DEBUG_MATRIX           = no
 CONSOLE_ENABLE         = yes
 
-#Combos!
-COMBO_ENABLE = yes
+COMBO_ENABLE           = yes
+CAPS_WORD_ENABLE       = yes
+
 VPATH                  +=  keyboards/gboards/
 
 ifeq ($(strip $(DEBUG_MATRIX)), yes)

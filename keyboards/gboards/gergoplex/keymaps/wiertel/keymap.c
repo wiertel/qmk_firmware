@@ -84,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * ├───────┼─────┼─────┼─────┼─────┤      ├─────┼─────┼─────┼─────┼───────┤
      * │   1   │  2  │  3  │  4  │  5  │      │  6  │  7  │  8  │  9  │   0   │
      * ├───────┼─────┼─────┼─────┼─────┤      ├─────┼─────┼─────┼─────┼───────┤
-     * │   `~  │  '" │  |  │  [{ │  ]} │      │  \| │  +  │  -_ │  {  │   }   │
+     * │   `~  │  '" │  |  │  [{ │  ]} │      │  \| │  -_ │  +  │  {  │   }   │
      * └───────┴─────┴─────┴─────┴─────┘      └─────┴─────┴─────┴─────┴───────┘
      *                ┌─────┼─────┼─────┐    ┌─────┼─────┼─────┐
      *                │     │     │     │    │  =  │  _  │ GUI │
@@ -93,7 +93,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_NUMBERS] = LAYOUT_split_3x5_3(
          KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,    KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,
          KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
-         KC_GRV,  KC_QUOT, KC_PIPE, KC_LBRC, KC_RBRC,    KC_BSLS, KC_PLUS, KC_MINS, KC_LCBR, KC_RCBR,
+         KC_GRV,  KC_QUOT, KC_PIPE, KC_LBRC, KC_RBRC,    KC_BSLS, KC_MINS, KC_PLUS, KC_LCBR, KC_RCBR,
                            XXXXXXX, XXXXXXX, XXXXXXX,    KC_EQL,  KC_UNDS, KC_RGUI),
 
     /* Keymap 2: Funtion keys, media, special (qmk)
@@ -119,7 +119,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 3: Motion layer
      *
      * ┌───────┬───────┬───────┬───────┬─────┐      ┌───────┬───────┬───────┬───────┬─────┐
-     * │       │  M⇈   │  M↑   │  M⇊   │     │      │ Home  │ PgDn  │ PgUp  │  End  │     │
+     * │  Ins  │  M⇈   │  M↑   │  M⇊   │     │      │ Home  │ PgDn  │ PgUp  │  End  │     │
      * ├───────┼───────┼───────┼───────┼─────┤      ├───────┼───────┼───────┼───────┼─────┤
      * │  Tab  │  M←   │  M↓   │  M→   │     │      │   ←   │   ↓   │   ↑   │   →   │     │
      * ├───────┼───────┼───────┼───────┼─────┤      ├───────┼───────┼───────┼───────┼─────┤
@@ -130,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *           └───────┼──────────┼─────────┘    └───────┼───────┼─────┘
      */
     [_MOTION] = LAYOUT_split_3x5_3(
-         XXXXXXX, KC_WH_U, KC_MS_U, KC_WH_D, XXXXXXX,      KC_HOME, KC_PGDN, KC_PGUP, KC_END,   XXXXXXX,
+         KC_INS,  KC_WH_U, KC_MS_U, KC_WH_D, XXXXXXX,      KC_HOME, KC_PGDN, KC_PGUP, KC_END,   XXXXXXX,
          KC_TAB,  KC_MS_L, KC_MS_D, KC_MS_R, XXXXXXX,      KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT, XXXXXXX,
          XXXXXXX, KC_LALT, KC_LSFT, KC_LCTL, XXXXXXX,      XXXXXXX, KC_ACL0, KC_ACL1, KC_ACL2,  XXXXXXX,
                            XXXXXXX, XXXXXXX, TO(_ALPHA),   KC_BTN1, KC_BTN2, KC_BTN3),
