@@ -6,6 +6,7 @@
 
 COMB(ioTab,      KC_TAB,          KC_I, KC_O)
 COMB(dtcmQuot,   KC_DOUBLE_QUOTE, KC_COMMA, KC_DOT)
+COMB(xcQuot,     KC_QUOTE,        KC_X, KC_C)
 
 // Word completion
 // #include "combos/eng-combos.def"
