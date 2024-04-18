@@ -19,6 +19,9 @@
  * https://github.com/qmk/qmk_firmware/blob/master/docs/keycodes.md
  */
 
+#include <stdbool.h>
+#include <stdint.h>
+#include "action.h"
 #include "keycodes.h"
 #include QMK_KEYBOARD_H
 #include "g/keymap_combo.h"
@@ -45,12 +48,12 @@ enum {
 
     /* Combomap
      *
-     * ┌───────┬─────┬─────┬─────┬─────┐      ┌───────────────────────────────┐
-     * │       │    ESC    │     │     │      │     │     │    TAB    │       │
-     * ├───────┼─────┼─────┼─────┼─────│      ├─────┼─────┼─────┼─────┼───────│
+     * ┌───────┬─────┬─────┬─────┬─────┐      ┌─────┬─────┬─────┬─────┬───────┐
+     * │       │     │     │     │     │      │     │     │    TAB    │       │
+     * ├───────┼─────┼─────┼─────┼─────┤      ├─────┼─────┼─────┼─────┼───────┤
      * │       │     │     │     │     │      │     │     │     │     │       │
-     * ├───────┼─────┼─────┼─────┼─────│      ├─────┼─────┼─────┼─────┼───────│
-     * │       │     │     │     │     │      │     │     │     │     "       │
+     * ├───────┼─────┼─────┼─────┼─────┤      ├─────┼─────┼─────┼─────┼───────┤
+     * │       │     │     │     │     │      │     │     │     "     │       │
      * └───────┴─────┴─────┴─────┴─────┘      └─────┴─────┴─────┴─────┴───────┘
      */
 
@@ -65,14 +68,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * │   Z   │   X   │   C   │   V   │  B  │      │   N   │   M   │   ,<  │   .>  │ /? │
      * └───────┴───────┴───────┴───────┴─────┘      └───────┴───────┴───────┴───────┴────┘
      *           ┌───────┼──────────┼─────────┐    ┌───────┼───────┼─────┐
-     *           │ SHIFT │ BKSP NUM │ ESC SPE │    │ ENT   │ SPC   │ ALT │
+     *           │ CapW  │ BKSP NUM │ ESC SPE │    │ ENT   │ SPC   │ ALT │
      *           └───────┼──────────┼─────────┘    └───────┼───────┼─────┘
      */
     [_ALPHA] = LAYOUT_split_3x5_3(
          KC_Q,     KC_W,   KC_E,   KC_R,   KC_T,     KC_Y,   KC_U,   KC_I,     KC_O,   KC_P,
          KC_A,     HOME_S, HOME_D, HOME_F, KC_G,     KC_H,   HOME_J, HOME_K,   HOME_L, KC_SCLN,
          KC_Z,     KC_X,   KC_C,   KC_V,   KC_B,     KC_N,   KC_M,   KC_COMMA, KC_DOT, KC_SLASH,
-            KC_LSFT, KC_NUM_BKSP, KC_SPE_ESC,        KC_ENTER, KC_SPACE, KC_RALT),
+            CW_TOGG, KC_NUM_BKSP, KC_SPE_ESC,        KC_ENTER, KC_SPACE, KC_RALT),
 
     /* Keymap 1: Numbers/Symbols
      *
@@ -96,11 +99,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 2: Funtion keys, media, special (qmk)
      *
      *    ┌─────┬─────┬────┬────┬────┐      ┌─────┬─────┬─────┬─────┬─────┐
-     *    │ F1  │ F2  │ F3 │ F4 │ F5 │      │  F6 │  F7 │ F8  │ F9  │ F10 │
+     *    │ F1  │ F2  │ F3 │ F4 │ F5 │      │ F6  │ F7  │ F8  │ F9  │ F10 │
      *    ├─────┼─────┼────┼────┼────┤      ├─────┼─────┼─────┼─────┼─────┤
-     *    │ ⏹   │  ⏮  │    │ ⏯  │ ⏭  │      │     │     │     │     │  "  │
+     *    │ ⏹   │  ⏮  │    │ ⏯  │ ⏭  │      │     │     │     │     │     │
      *    ├─────┼─────┼────┼────┼────┤      ├─────┼─────┼─────┼─────┼─────┤
-     *    │ F11 │ F12 │ V- │ V+ │ V0 │      │     │     │     │Combo│Debug│
+     *    │  ~  │  "  │ V- │ V+ │ V0 │      │ F11 │ F12 │     │Combo│Debug│
      *    └─────┴─────┴────┴────┴────┘      └─────┴─────┴─────┴─────┴─────┘
      *         ┌───────┼───────┼──────┐    ┌─────────┼─────┼───────┐
      *         │       │       │      │    │  Motion │ DEL │ CTRL  │
@@ -108,8 +111,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [_SPECIAL] = LAYOUT_split_3x5_3(
          KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
-         KC_MSTP, KC_MPRV, XXXXXXX, KC_MPLY, KC_MNXT,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DQUO,
-         KC_F11,  KC_F12,  KC_VOLD, KC_VOLU, KC_MUTE,    XXXXXXX, XXXXXXX, XXXXXXX, CM_TOGG, DB_TOGG,
+         KC_MSTP, KC_MPRV, XXXXXXX, KC_MPLY, KC_MNXT,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+         KC_TILD, KC_DQT,  KC_VOLD, KC_VOLU, KC_MUTE,    KC_F11,  KC_F12,  XXXXXXX, CM_TOGG, DB_TOGG,
                            _______, _______, _______,    TO(_MOTION), KC_DEL, KC_RCTL),
 
 
@@ -120,15 +123,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * ├───────┼───────┼───────┼───────┼─────┤      ├───────┼───────┼───────┼───────┼─────┤
      * │  Tab  │  M←   │  M↓   │  M→   │     │      │   ←   │   ↓   │   ↑   │   →   │     │
      * ├───────┼───────┼───────┼───────┼─────┤      ├───────┼───────┼───────┼───────┼─────┤
-     * │       │       │       │       │     │      │       │ Macc1 │ Macc2 │ Macc3 │     │
+     * │       │  ALT  │ SHIFT │ CTRL  │     │      │       │ Macc1 │ Macc2 │ Macc3 │     │
      * └───────┴───────┴───────┴───────┴─────┘      └───────┴───────┴───────┴───────┴─────┘
      *           ┌───────┼──────────┼─────────┐    ┌───────┼───────┼─────┐
-     *           │ CTRL  │          │  Alpha  │    │  M1   │  M2   │  M3 │
+     *           │       │          │  Alpha  │    │  M1   │  M2   │  M3 │
      *           └───────┼──────────┼─────────┘    └───────┼───────┼─────┘
      */
     [_MOTION] = LAYOUT_split_3x5_3(
          XXXXXXX, KC_WH_U, KC_MS_U, KC_WH_D, XXXXXXX,      KC_HOME, KC_PGDN, KC_PGUP, KC_END,   XXXXXXX,
          KC_TAB,  KC_MS_L, KC_MS_D, KC_MS_R, XXXXXXX,      KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT, XXXXXXX,
-         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, KC_ACL0, KC_ACL1, KC_ACL2,  XXXXXXX,
-                           KC_LCTL, XXXXXXX, TO(_ALPHA),   KC_BTN1, KC_BTN2, KC_BTN3),
+         XXXXXXX, KC_LALT, KC_LSFT, KC_LCTL, XXXXXXX,      XXXXXXX, KC_ACL0, KC_ACL1, KC_ACL2,  XXXXXXX,
+                           XXXXXXX, XXXXXXX, TO(_ALPHA),   KC_BTN1, KC_BTN2, KC_BTN3),
 };
+
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // If console is enabled, it will print the matrix position and status of each key pressed
+#ifdef CONSOLE_ENABLE
+    dprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+#endif
+  return true;
+}
