@@ -21,3 +21,7 @@
 #define MK_C_INTERVAL_UNMOD 	16
 #define MK_C_OFFSET_1	        16
 #define MK_C_INTERVAL_1	        16
+
+
+#define SCREENSAVE_DELAY 180000  //configure how long to wait after last activity. 180000ms = 3 mins
+

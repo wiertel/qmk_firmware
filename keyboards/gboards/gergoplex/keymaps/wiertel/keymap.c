@@ -33,6 +33,10 @@ enum {
     _MOTION,  // mouse, cursor, page motions
 };
 
+enum custom_keycodes {
+    NOSLEEP = SAFE_RANGE,  // turns on screensaver mode, https://pastebin.com/raw/CEg88vky
+};
+
 // Left-hand home row mods
 #define HOME_S LALT_T(KC_S)
 #define HOME_D LSFT_T(KC_D)
@@ -70,6 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *           ┌───────┼──────────┼─────────┐    ┌───────┼───────┼─────┐
      *           │ CapW  │ BKSP NUM │ ESC SPE │    │ ENT   │ SPC   │ ALT │
      *           └───────┼──────────┼─────────┘    └───────┼───────┼─────┘
+     *           TODO: another layer, maybe instead of CapW
      */
     [_ALPHA] = LAYOUT_split_3x5_3(
          KC_Q,     KC_W,   KC_E,   KC_R,   KC_T,     KC_Y,   KC_U,   KC_I,     KC_O,   KC_P,
@@ -101,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *    ┌─────┬─────┬────┬────┬────┐      ┌─────┬─────┬─────┬─────┬─────┐
      *    │ F1  │ F2  │ F3 │ F4 │ F5 │      │ F6  │ F7  │ F8  │ F9  │ F10 │
      *    ├─────┼─────┼────┼────┼────┤      ├─────┼─────┼─────┼─────┼─────┤
-     *    │ ⏹   │  ⏮  │    │ ⏯  │ ⏭  │      │     │     │     │     │     │
+     *    │ ⏹  │  ⏮ │    │ ⏯ │ ⏭ │      │NoSlp│     │     │     │     │
      *    ├─────┼─────┼────┼────┼────┤      ├─────┼─────┼─────┼─────┼─────┤
      *    │  ~  │  "  │ V- │ V+ │ V0 │      │ F11 │ F12 │     │Combo│Debug│
      *    └─────┴─────┴────┴────┴────┘      └─────┴─────┴─────┴─────┴─────┘
@@ -111,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [_SPECIAL] = LAYOUT_split_3x5_3(
          KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
-         KC_MSTP, KC_MPRV, XXXXXXX, KC_MPLY, KC_MNXT,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+         KC_MSTP, KC_MPRV, XXXXXXX, KC_MPLY, KC_MNXT,    NOSLEEP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
          KC_TILD, KC_DQT,  KC_VOLD, KC_VOLU, KC_MUTE,    KC_F11,  KC_F12,  XXXXXXX, CM_TOGG, DB_TOGG,
                            _______, _______, _______,    TO(_MOTION), KC_DEL, KC_RCTL),
 
@@ -128,6 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *           ┌───────┼──────────┼─────────┐    ┌───────┼───────┼─────┐
      *           │       │          │  Alpha  │    │  M1   │  M2   │  M3 │
      *           └───────┼──────────┼─────────┘    └───────┼───────┼─────┘
+     *           TODO: add GUI somewhere here?
      */
     [_MOTION] = LAYOUT_split_3x5_3(
          KC_INS,  KC_WH_U, KC_MS_U, KC_WH_D, XXXXXXX,      KC_HOME, KC_PGDN, KC_PGUP, KC_END,   XXXXXXX,
@@ -136,11 +142,34 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                            XXXXXXX, XXXXXXX, TO(_ALPHA),   KC_BTN1, KC_BTN2, KC_BTN3),
 };
 
+bool stop_screensaver = false;     //screensaver mode status
+uint32_t last_activity_timer = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  // If console is enabled, it will print the matrix position and status of each key pressed
+    // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE
     dprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 #endif
-  return true;
+    if (record->event.pressed)
+        stop_screensaver = false;  //turn off screensaver mode on any keypress
+
+    switch (keycode) {
+        case NOSLEEP:
+            if (record->event.pressed) {               //if NOSLEEP is pressed
+                SEND_STRING("NOSLEEP");
+                stop_screensaver = true;               //turn on screensaver mode
+                last_activity_timer = timer_read32();  //reset timer
+            }
+        break;
+    }
+    return true;
+}
+
+void matrix_scan_user(void) {
+    if (stop_screensaver) {                                             //if screensaver mode is active
+        if (timer_elapsed32(last_activity_timer) > SCREENSAVE_DELAY) {  //and no key has been pressed in more than SCREENSAVE_DELAY ms
+            tap_code16(KC_F18);                                         //  tap F18
+            last_activity_timer = timer_read32();                       //  reset last_activity_timer
+        }
+    }
 }
